@@ -5,7 +5,7 @@ export const MAX_PROMPT_LENGTH = 1000;
 
 // GET handler that proxies requests to the OpenAI TTS API and streams
 // the response back to the client.
-import { VOICES } from "@/lib/library";
+import { MODELS, VOICES } from "@/lib/library";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
   let input = searchParams.get("input") || "";
   let prompt = searchParams.get("prompt") || "";
   const voice = searchParams.get("voice") || "";
+  const model = searchParams.get("model") || "gpt-4o-mini-tts";
   const vibe = searchParams.get("vibe") || "audio";
 
   // Truncate input and prompt to max 1000 characters
@@ -28,6 +29,10 @@ export async function GET(req: NextRequest) {
     return new Response("Invalid voice", { status: 400 });
   }
 
+  if (!MODELS.includes(model as (typeof MODELS)[number])) {
+    return new Response("Invalid model", { status: 400 });
+  }
+
   try {
     const apiResponse = await fetch("https://api.openai.com/v1/audio/speech", {
       method: "POST",
@@ -36,7 +41,7 @@ export async function GET(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini-tts",
+        model,
         input,
         response_format,
         voice,
@@ -76,6 +81,7 @@ export async function POST(req: NextRequest) {
   let input = formData.get("input")?.toString() || "";
   let prompt = formData.get("prompt")?.toString() || "";
   const voice = formData.get("voice")?.toString() || "";
+  const model = formData.get("model")?.toString() || "gpt-4o-mini-tts";
   const vibe = formData.get("vibe") || "audio";
 
   // Truncate input and prompt to max 1000 characters
@@ -88,6 +94,10 @@ export async function POST(req: NextRequest) {
     return new Response("Invalid voice", { status: 400 });
   }
 
+  if (!MODELS.includes(model as (typeof MODELS)[number])) {
+    return new Response("Invalid model", { status: 400 });
+  }
+
   try {
     const apiResponse = await fetch("https://api.openai.com/v1/audio/speech", {
       method: "POST",
@@ -96,7 +106,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini-tts",
+        model,
         input,
         response_format,
         voice,

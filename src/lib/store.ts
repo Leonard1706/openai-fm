@@ -2,12 +2,14 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { LibraryEntry } from "./types";
 import {
+  DEFAULT_MODEL,
   DEFAULT_VOICE,
   getLibraryByPrompt,
   getRandomLibrarySet,
 } from "./library";
 
 export interface AppState {
+  model: string;
   voice: string;
   input: string;
   inputDirty: boolean;
@@ -19,6 +21,7 @@ export interface AppState {
 }
 
 const INITIAL_STATE: AppState = {
+  model: DEFAULT_MODEL,
   voice: DEFAULT_VOICE,
   input: "",
   inputDirty: false,

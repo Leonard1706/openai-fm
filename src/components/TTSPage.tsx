@@ -4,6 +4,8 @@ import {
   getRandomLibrarySet,
   getRandomVoice,
   LIBRARY,
+  MODEL_LABELS,
+  MODELS,
   VOICES,
 } from "../lib/library";
 import { Block } from "./ui/Block";
@@ -37,6 +39,7 @@ export default function TtsPage() {
 }
 
 const Board = () => {
+  const model = appStore.useState((state) => state.model);
   const voice = appStore.useState((state) => state.voice);
   const input = appStore.useState((state) => state.input);
   const inputDirty = appStore.useState((state) => state.inputDirty);
@@ -87,6 +90,32 @@ const Board = () => {
           onOpenChange={() => {}}
         />
       )}
+      <div className="flex flex-row">
+        <Block title="Model">
+          <div className="flex flex-row gap-3">
+            {MODELS.map((m) => (
+              <Button
+                key={m}
+                block
+                color="default"
+                onClick={() => {
+                  appStore.setState((draft) => {
+                    draft.model = m;
+                    draft.latestAudioUrl = null;
+                  });
+                }}
+                selected={m === model}
+                className="min-h-[60px] max-h-[100px] flex-col items-start justify-between relative"
+              >
+                <span>{MODEL_LABELS[m]}</span>
+                <div className="absolute left-[0.93rem] bottom-[0.93rem]">
+                  <ButtonLED />
+                </div>
+              </Button>
+            ))}
+          </div>
+        </Block>
+      </div>
       <div className="flex flex-row">
         <Block title="Voice">
           <div className="grid grid-cols-12 gap-3">

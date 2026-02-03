@@ -267,6 +267,20 @@ export const VOICES = [
 
 export const DEFAULT_VOICE = "coral";
 
+export const MODELS = [
+  "gpt-4o-mini-tts",
+  "gpt-4o-mini-tts-2025-12-15",
+  "gpt-4o-mini-tts-2025-03-20",
+] as const;
+
+export const MODEL_LABELS: Record<string, string> = {
+  "gpt-4o-mini-tts": "Latest",
+  "gpt-4o-mini-tts-2025-12-15": "Dec 2025",
+  "gpt-4o-mini-tts-2025-03-20": "Mar 2025",
+};
+
+export const DEFAULT_MODEL = "gpt-4o-mini-tts";
+
 export const getRandomVoice = (currentVoice: string): string => {
   const availableVoices = VOICES.filter((voice) => voice !== currentVoice);
   return availableVoices[Math.floor(Math.random() * availableVoices.length)];
